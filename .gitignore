@@ -1,0 +1,12 @@
+./lamenes.tns
+*.o
+*.tns
+*.nes
+*.zip
+*.exe
+*.DLL
+*.dll
+./lamenes
+lame6502/*.o
+lib/*.o
+mappers/*.o
