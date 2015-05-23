@@ -466,23 +466,13 @@ int32 listeAffichageElements(int32 type){
 void setpixel(unsigned short x, unsigned short y, unsigned char R, unsigned char G, unsigned char B)
 {
 	GrafCon contexteGraphique;
-	Rect rectangle;
 	int32 couleur;
 	
 	couleur = MakeRGB15(R,G,B);
-
-	// Cree la couleur de fond qui est determinee avec une valeur numerique obtenue a partir de MakeRGB15(R,G,B)
-	// R, G et B vont de 0 a 255
-	// Le noir pur est obtenu avec MakeRGB15(0,0,0)
 	SetFGPen(&contexteGraphique, couleur);
-	// Defini les coordonnees du rectangle selon le format de l'ecran
-	rectangle.rect_XLeft=x;
-	rectangle.rect_YTop=y;
-	rectangle.rect_XRight=x+1;
-	rectangle.rect_YBottom=y+1;
-	// Applique le rectangle sur l'image de l'ecran courant
-	FillRect(pointeurEcranContexte->sc_BitmapItems[ecranCourant], &contexteGraphique, &rectangle);
-	// Met a jour l'affichage
+	
+	WritePixel(pointeurEcranContexte->sc_BitmapItems[ecranCourant], &contexteGraphique, x, y);
+
 	affichageMiseAJour();
 }
 
