@@ -1006,17 +1006,10 @@ void render_sprites()
 
 void update_screen()
 {
-	/*int nescolor = ppu_memory[0x3f00];*/
-	
-#ifdef PC
-	SDL_Flip(screen);
-#else
-	affichageRendu();
-#endif
-
-	/* update the screen */
-	/*SDL_Flip(screen);*/
-
-	/* clear the surface and set it to nescolor 0x10 */
-	/*SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, palette[nescolor].r, palette[nescolor].g, palette[nescolor].b));*/
+	#ifdef PC
+		SDL_Flip(screen);
+	#else
+		affichageMiseAJour();
+		affichageRendu();
+	#endif
 }

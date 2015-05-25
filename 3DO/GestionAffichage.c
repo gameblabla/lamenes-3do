@@ -472,8 +472,6 @@ void setpixel(unsigned short x, unsigned short y, unsigned char R, unsigned char
 	SetFGPen(&contexteGraphique, couleur);
 	
 	WritePixel(pointeurEcranContexte->sc_BitmapItems[ecranCourant], &contexteGraphique, x, y);
-
-	affichageMiseAJour();
 }
 
 bool Screen_format()
