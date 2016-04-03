@@ -83,10 +83,6 @@ void init_SDL(int type, int fullscreen)
 		
 		InitializeControlPads();
 		
-		imageFondChargement("System/donotremove.cel");
-		
-		affichageMiseAJour();
-		
 		affichageRendu();
 	
 	#endif

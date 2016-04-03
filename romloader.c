@@ -115,9 +115,9 @@ int analyze_header(char *romfn)
 
 #else
 
-	romlen = SeekDiskStream(romfp, 0, SEEK_END);
+	romlen = SeekDiskStream(romfp, 0, 3);
 
-	SeekDiskStream(romfp, 0, SEEK_SET);
+	SeekDiskStream(romfp, 0, 1);
 
 	ReadDiskStream(romfp, (char *)&header[0], 15);
 

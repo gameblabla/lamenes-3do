@@ -1009,7 +1009,6 @@ void update_screen()
 	#ifdef PC
 		SDL_Flip(screen);
 	#else
-		affichageMiseAJour();
 		affichageRendu();
 	#endif
 }
