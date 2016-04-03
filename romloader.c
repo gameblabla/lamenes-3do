@@ -29,7 +29,13 @@
  * SUCH DAMAGE.
  */
 
-/*#include <types.h>*/
+#ifndef PC
+
+#include <filestreamfunctions.h>
+
+#endif
+
+ /*#include <types.h>*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -41,6 +47,7 @@
 
 /* pointers to the nes headers */
 unsigned char *header;
+
 unsigned char PRG; /* rom mem */
 unsigned char CHR; /* vrom mem */
 
@@ -59,38 +66,71 @@ int analyze_header(char *romfn)
 {
 	int i;
 
+#ifdef PC
+
 	FILE *romfp;
 
 	/*
-	 * nes header is 15 bytes
-	 * nes internal memory (6502 = 65536 bytes (64K))
-	 */
+	* nes header is 15 bytes
+	* nes internal memory (6502 = 65536 bytes (64K))
+	*/
 	header = (unsigned char *)malloc(15);
 
-	romfp=fopen(romfn,"rb");
-	if(!romfp) 
+	romfp = fopen(romfn, "rb");
+	if (!romfp)
 	{
 		free(header);
 		return(1);
 	}
+
+#else
+
+	Stream *romfp;
+
+	/*
+	* nes header is 15 bytes
+	* nes internal memory (6502 = 65536 bytes (64K))
+	*/
+	header = (unsigned char *)malloc(15);
+
+	romfp = OpenDiskStream(romfn, 0);
+	if (romfp == NULL)
+	{
+		return(1);
+	}
+
+#endif
+
+#ifdef PC
 
 	fseek(romfp, 0, 2);
 	romlen = ftell(romfp);
 
-	fseek(romfp,0,SEEK_SET);
+	fseek(romfp, 0, SEEK_SET);
 
 	/* read the first 15 bytes of the rom */
-	fread(&header[0],1,15,romfp);
+	fread(&header[0], 1, 15, romfp);
 
 	fclose(romfp);
 
+#else
+
+	romlen = SeekDiskStream(romfp, 0, SEEK_END);
+
+	SeekDiskStream(romfp, 0, SEEK_SET);
+
+	ReadDiskStream(romfp, (char *)&header[0], 15);
+
+	CloseDiskStream(romfp);
+
+#endif
+
 	/* ines rom header must be: "NES\n" (HEX: 4E 45 53 1A), else exit */
-	if((header[0] != 'N') || (header[1] != 'E') || (header[2] != 'S') || (header[3] != 0x1A)) 
+	if ((header[0] != 'N') || (header[1] != 'E') || (header[2] != 'S') || (header[3] != 0x1A))
 	{
 		free(header);
 		return(1);
 	}
-
 
 	PRG = header[4];
 
@@ -105,8 +145,8 @@ int analyze_header(char *romfn)
 	 */
 	RCB = (header[6] - ((header[6] >> 4) << 4));
 
-	switch(RCB) {
-		case 0x00:
+	switch (RCB) {
+	case 0x00:
 		/* horizontal mirroring only */
 		MIRRORING = 0;
 		SRAM = 0;
@@ -114,7 +154,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 0;
 		break;
 
-		case 0x01:
+	case 0x01:
 		/* vertical mirroring only */
 		MIRRORING = 1;
 		SRAM = 0;
@@ -122,7 +162,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 0;
 		break;
 
-		case 0x02:
+	case 0x02:
 		/* horizontal mirroring and sram enabled */
 		MIRRORING = 0;
 		SRAM = 1;
@@ -130,7 +170,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 0;
 		break;
 
-		case 0x03:
+	case 0x03:
 		/* vertical mirroring and sram enabled */
 		MIRRORING = 1;
 		SRAM = 1;
@@ -138,7 +178,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 0;
 		break;
 
-		case 0x04:
+	case 0x04:
 		/* horizontal mirroring and trainer on */
 		MIRRORING = 0;
 		SRAM = 0;
@@ -146,7 +186,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 0;
 		break;
 
-		case 0x05:
+	case 0x05:
 		/* vertical mirroring and trainer on */
 		MIRRORING = 1;
 		SRAM = 0;
@@ -154,7 +194,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 0;
 		break;
 
-		case 0x06:
+	case 0x06:
 		/* horizontal mirroring, sram enabled and trainer on */
 		MIRRORING = 0;
 		SRAM = 1;
@@ -162,7 +202,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 0;
 		break;
 
-		case 0x07:
+	case 0x07:
 		/* vertical mirroring, sram enabled and trainer on */
 		MIRRORING = 1;
 		SRAM = 1;
@@ -170,7 +210,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 0;
 		break;
 
-		case 0x08:
+	case 0x08:
 		/* horizontal mirroring and four screen vram on */
 		MIRRORING = 0;
 		SRAM = 0;
@@ -178,7 +218,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 1;
 		break;
 
-		case 0x09:
+	case 0x09:
 		/* vertical mirroring and four screen vram on */
 		MIRRORING = 1;
 		SRAM = 0;
@@ -186,7 +226,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 1;
 		break;
 
-		case 0x0A:
+	case 0x0A:
 		/* horizontal mirroring, sram enabled and four screen vram on */
 		MIRRORING = 0;
 		SRAM = 1;
@@ -194,7 +234,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 1;
 		break;
 
-		case 0x0B:
+	case 0x0B:
 		/* vertical mirroring, sram enabled and four screen vram on */
 		MIRRORING = 1;
 		SRAM = 1;
@@ -202,7 +242,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 1;
 		break;
 
-		case 0x0C:
+	case 0x0C:
 		/* horizontal mirroring, trainer on and four screen vram on */
 		MIRRORING = 0;
 		SRAM = 0;
@@ -210,7 +250,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 1;
 		break;
 
-		case 0x0D:
+	case 0x0D:
 		/* vertical mirroring, trainer on and four screen vram on */
 		MIRRORING = 1;
 		SRAM = 0;
@@ -218,7 +258,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 1;
 		break;
 
-		case 0x0E:
+	case 0x0E:
 		/* horizontal mirroring, sram enabled, trainer on and four screen vram on */
 		MIRRORING = 0;
 		SRAM = 1;
@@ -226,7 +266,7 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 1;
 		break;
 
-		case 0x0F:
+	case 0x0F:
 		/* vertical mirroring, sram enabled, trainer on and four screen vram on */
 		MIRRORING = 1;
 		SRAM = 1;
@@ -234,38 +274,56 @@ int analyze_header(char *romfn)
 		FS_MIRROR = 1;
 		break;
 
-		default:
+	default:
 
 		break;
 	}
 
 	free(header);
 
-	return(0);  
+	return(0);
 }
 
 int load_rom(char *romfn)
 {
+#ifdef PC
+
 	FILE *romfp;
 
-	romfp=fopen(romfn,"rb");
-	
-	if (!romfp) 
+	romfp = fopen(romfn, "rb");
+
+	if (!romfp)
 	{
 		return(1);
 	}
 
-	fread(&romcache[0x0000],1,romlen,romfp);
+	fread(&romcache[0x0000], 1, romlen, romfp);
 	fclose(romfp);
 
-	/* load prg data in memory */
-	if(PRG == 0x01) 
+#else
+
+	Stream *romfp;
+
+	romfp = OpenDiskStream(romfn, 0);
+	if (romfp == NULL)
 	{
-		/* map 16kb in mirror mode */ 
+		return(1);
+	}
+
+	ReadDiskStream(romfp, (char *)&romcache[0x0000], romlen);
+
+	CloseDiskStream(romfp);
+
+#endif
+
+	/* load prg data in memory */
+	if (PRG == 0x01)
+	{
+		/* map 16kb in mirror mode */
 		memcpy(memory + 0x8000, romcache + 16, 16384);
 		memcpy(memory + 0xC000, romcache + 16, 16384);
-	} 
-	else 
+	}
+	else
 	{
 		/* map 2x 16kb the first one into 8000 and the last one into c000 */
 		memcpy(memory + 0x8000, romcache + 16, 16384);
@@ -273,7 +331,7 @@ int load_rom(char *romfn)
 	}
 
 	/* load chr data in ppu memory */
-	if(CHR != 0x00) 
+	if (CHR != 0x00)
 	{
 		memcpy(ppu_memory, romcache + 16 + (PRG * 16384), 8192);
 
