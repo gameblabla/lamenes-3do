@@ -316,6 +316,7 @@ void write_ppu_memory(unsigned int address,unsigned char data)
 
 void draw_pixel(int x, int y, int nescolor)
 {
+	x = x + 32;
 #ifdef PC
 	
 	if (nescolor != 0)
