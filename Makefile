@@ -1,4 +1,4 @@
-3DODEV	= C:/4DODev/
+3DODEV	= C:/3DODev/
 ARMDEV	= C:/arm250/
 
 # Project specific settings

@@ -463,15 +463,21 @@ int32 listeAffichageElements(int32 type){
 	
 }
 
-void setpixel(unsigned short x, unsigned short y, unsigned char R, unsigned char G, unsigned char B)
-{
+void fill_rectangle(int x, int y, int size_rect, int RED, int GREEN, int BLUE)
+{	
 	GrafCon contexteGraphique;
+	Rect rectangle;
 	int32 couleur;
 	
-	couleur = MakeRGB15(R,G,B);
+	couleur = MakeRGB15(RED,GREEN,BLUE);
 	SetFGPen(&contexteGraphique, couleur);
+
+	rectangle.rect_XLeft=x;
+	rectangle.rect_YTop=y;
+	rectangle.rect_XRight=x+size_rect-1;
+	rectangle.rect_YBottom=y+size_rect-1;
 	
-	WritePixel(pointeurEcranContexte->sc_BitmapItems[ecranCourant], &contexteGraphique, x, y);
+	FillRect(pointeurEcranContexte->sc_BitmapItems[ecranCourant], &contexteGraphique, &rectangle);
 }
 
 bool Screen_format()

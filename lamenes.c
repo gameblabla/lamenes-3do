@@ -482,12 +482,12 @@ write_memory(unsigned int address,unsigned char data)
 void
 show_header()
 {
-	fprintf(stdout,"\n"
+	/*fprintf(stdout,"\n"
 	"************************************************************\n"
 	"*** LameNES version 0.1 by Joey Loman <joey@lamenes.org> ***\n"
 	"************************************************************\n"
 	"\n"
-	);
+	);*/
 }
 
 void start_emulation()
@@ -563,7 +563,7 @@ void start_emulation()
 
 void reset_emulation()
 {
-	printf("[*] resetting emulation...\n");
+	/*printf("[*] resetting emulation...\n");*/
 
 	if(load_rom(romfn) == 1) {
 		free(sprite_memory);
@@ -592,7 +592,7 @@ quit_emulation()
 	free(memory);
 	free(romcache);
 
-	printf("[!] quiting LameNES!\n\n");
+	/*printf("[!] quiting LameNES!\n\n");*/
 
 	exit(0);
 }
@@ -637,11 +637,11 @@ int main(void)
 	/* rom cache memory */
 	romcache = (unsigned char *)malloc(romlen);
 
-	printf("[*] PRG = %x, CHR = %x, OS_MIRROR = %d, FS_MIRROR = %d, TRAINER = %d"
+	/*printf("[*] PRG = %x, CHR = %x, OS_MIRROR = %d, FS_MIRROR = %d, TRAINER = %d"
 		", SRAM = %d, MIRRORING = %d\n",
 		PRG,CHR,OS_MIRROR, FS_MIRROR,TRAINER,SRAM,MIRRORING);
 
-	printf("[*] mapper: %d found!\n",MAPPER);
+	printf("[*] mapper: %d found!\n",MAPPER);*/
 
 	if (load_rom("rom.nes") == 1)
 	{
@@ -681,7 +681,7 @@ int main(void)
 	sdl_screen_height = height * scale;
 	sdl_screen_width = width * scale;
 
-	if(pal == 1) {
+	/*if(pal == 1) {
 		printf("[*] PAL_SPEED: %d\n",PAL_SPEED);
 		printf("[*] PAL_VBLANK_INT: %d\n",PAL_VBLANK_INT);
 		printf("[*] PAL_SCANLINE_REFRESH: %d\n",PAL_SCANLINE_REFRESH);
@@ -698,7 +698,7 @@ int main(void)
 	}
 
 	printf("[*] setting screen resolution to: %dx%d\n",sdl_screen_width,sdl_screen_height);
-
+*/
 	if (pal == 1)
 	{
 		init_SDL(0,fullscreen);
@@ -709,7 +709,7 @@ int main(void)
 		init_SDL(1,fullscreen);
 	}
 
-	printf("[*] resetting cpu...\n");
+	/*printf("[*] resetting cpu...\n");*/
 
 	/*
 	 * first reset the cpu at poweron
@@ -721,7 +721,7 @@ int main(void)
 	 */
 	reset_input();
 
-	printf("[*] LameNES starting emulation!\n");
+	/*printf("[*] LameNES starting emulation!\n");*/
 
 	if(pal == 1) 
 	{

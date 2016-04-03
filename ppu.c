@@ -268,9 +268,9 @@ void write_ppu_memory(unsigned int address,unsigned char data)
 				ppu_memory[ppu_addr + 0x400] = data;
 				ppu_memory[ppu_addr + 0x800] = data;
 				ppu_memory[ppu_addr + 0x1200] = data;
-			} else if(FS_MIRROR == 1) {
+			} /*else if(FS_MIRROR == 1) {
 				printf("FS_MIRRORING detected! do nothing\n");
-			} else {
+			} */else {
 				if(MIRRORING == 0) {
 					/* horizontal */
 					ppu_memory[ppu_addr + 0x400] = data;
@@ -331,7 +331,7 @@ void draw_pixel(int x, int y, int nescolor)
 	/* pixel tranparency */
 	if (nescolor != 0)
 	{
-		setpixel(x, y, palette[nescolor].r, palette[nescolor].g, palette[nescolor].b);
+		fill_rectangle(x, y, 1, palette[nescolor].r, palette[nescolor].g, palette[nescolor].b);
 	}
 #endif
 }

@@ -231,52 +231,36 @@ void check_SDL_event()
 	}
 #else	
 	uint32	gButtons;
+	unsigned char i;
 	
 	DoControlPad(1, &gButtons, (ControlUp | ControlDown | ControlLeft | ControlRight));
 	
-	if (gButtons & ControlUp)	
-	{
-		set_input((char *) 2);
-	}
-	else
-	{
-		clear_input((char *) 2);
-	}
-	
+	for (i=0;i<9;i++)
+		clear_input((char *) i);
+		
 	if (gButtons & ControlDown)	
 	{
 		set_input((char *) 1);
 	}
-	else
+	
+	if (gButtons & ControlUp)	
 	{
-		clear_input((char *) 1);
+		set_input((char *) 2);
 	}
 	
 	if (gButtons & ControlLeft)	
 	{
 		set_input((char *) 3);
 	}
-	else
-	{
-		clear_input((char *) 3);
-	}
 	
 	if (gButtons & ControlRight)	
 	{
 		set_input((char *) 4);
 	}
-	else
-	{
-		clear_input((char *) 4);
-	}
 	
 	if (gButtons & ControlStart)	
 	{
 		set_input((char *) 5);
-	}
-	else
-	{
-		clear_input((char *) 5);
 	}
 	
 	/*	Select */
@@ -284,28 +268,16 @@ void check_SDL_event()
 	{
 		set_input((char *) 6);
 	}
-	else
-	{
-		clear_input((char *) 6);
-	}
 
 	if (gButtons & ControlA)	
 	{
 		set_input((char *) 7);
 	}	
-	else
-	{
-		clear_input((char *) 7);
-	}
 	
 	if (gButtons & ControlB)	
 	{
 		set_input((char *) 8);
 	}	
-	else
-	{
-		clear_input((char *) 8);
-	}
 #endif
 	
 }

@@ -43,7 +43,7 @@
 #include "GestionTextes.h"
 /* ------------------------------ */
 
-void setpixel(unsigned short x, unsigned short y, unsigned char R, unsigned char G, unsigned char B);
+void fill_rectangle(int x, int y, int size_rect, int RED, int GREEN, int BLUE);
 
 /* Initialise l'affichage */
 bool affichageInitialisation(void);
